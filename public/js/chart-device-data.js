@@ -6,6 +6,7 @@ $(document).ready(() => {
   const protocol = document.location.protocol.startsWith('https') ? 'wss://' : 'ws://';
   const webSocket = new WebSocket(protocol + location.host);
 
+  /*
   // A class for holding the last N points of telemetry for a device
   class DeviceData {
     constructor(deviceId) {
@@ -126,7 +127,7 @@ $(document).ready(() => {
     chartData.datasets[1].data = device.humidityData;
   }
   listOfDevices.addEventListener('change', OnSelectionChange, false);
-
+*/
   // When a web socket message arrives:
   // 1. Unpack it
   // 2. Validate it has date/time and temperature
