@@ -104,14 +104,13 @@ $(document).ready(() => {
       noteArr.forEach(el => {
         const tmp = el.split(",");
         const note = parseInt(tmp[0]);
-        const count = parseInt(tmp[1]);
-        for (let i = 0; i < count; i++) {
-          const cur = Date.now();
-          scheduledTime = Math.max(scheduledTime, cur) + timeInterval;
-          setTimeout(manualPlay, scheduledTime - cur, map[note].charCodeAt(0));
-          console.log('delay: ' + (scheduledTime - cur));
-          console.log(map[note].charCodeAt(0));
-        }
+        const time = parseInt(tmp[1]);
+        
+        const cur = Date.now();
+        scheduledTime = Math.max(scheduledTime, cur) + time;
+        setTimeout(manualPlay, scheduledTime - cur, map[note].charCodeAt(0));
+        console.log('delay: ' + (scheduledTime - cur));
+        console.log(map[note].charCodeAt(0));
       });
 
     } catch (err) {
