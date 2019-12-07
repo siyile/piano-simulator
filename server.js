@@ -4,8 +4,11 @@ const WebSocket = require('ws');
 const path = require('path');
 const EventHubReader = require('./scripts/event-hub-reader.js');
 
-const iotHubConnectionString = process.env.IotHubConnectionString;
-const eventHubConsumerGroup = process.env.EventHubConsumerGroup;
+// const iotHubConnectionString = process.env.IotHubConnectionString;
+// const eventHubConsumerGroup = process.env.EventHubConsumerGroup;
+
+const iotHubConnectionString = `HostName=uci-244-group6.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=8luCnLmXW3i4wGuGR1CnxH2YY5bVi1uVUPP9EZBNplU=`;
+const eventHubConsumerGroup = `demo`;
 
 // Redirect requests to the public subdirectory to the root
 const app = express();

@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
+
 $(document).ready(() => {
   // if deployed to a site supporting SSL, use wss://
   const protocol = document.location.protocol.startsWith('https') ? 'wss://' : 'ws://';
@@ -56,36 +57,10 @@ $(document).ready(() => {
 
   window.addEventListener("keydown", playNote);
 
-
-
-  let scheduledTime = Date.now() + 3000;
-  const timeInterval = 500;
-
-  const map = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
-
-  // test = () => {
-  //   // notes = `0,0#1,2#0,1#2,2#0,1`;
-  //   notes = '0,1#1,2#2,2#';
-
-  //   const noteArr = notes.split("#");
-
-  //   noteArr.forEach(el => {
-  //     const tmp = el.split(",");
-  //     const note = parseInt(tmp[0]);
-  //     const count = parseInt(tmp[1]);
-  //     for (let i = 0; i < count; i++) {
-  //       const cur = Date.now();
-  //       scheduledTime = Math.max(scheduledTime, cur) + timeInterval;
-  //       setTimeout(manualPlay, scheduledTime - cur, map[note].charCodeAt(0));
-  //       console.log('delay: ' + (scheduledTime - cur));
-  //       console.log(map[note].charCodeAt(0));
-  //     }
-  //   });
-  // }
-
-  // setTimeout(test, 3000);
+  sessionStorage.setItem('scheduledTime', Date.now());
 
   webSocket.onmessage = function onMessage(message) {
+    const map = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     try {
       const messageData = JSON.parse(message.data);
       console.log(messageData);
@@ -95,27 +70,33 @@ $(document).ready(() => {
       //   return;
       // }
 
+      let scheduledTime = sessionStorage.getItem('scheduledTime');
+      console.log('start!!!!!!!!!' + scheduledTime)
+
       let notes;
       notes = messageData.IotData.notes;
       // notes = '0,1#1,2#2,2#';
-
+      notes = notes.slice(0, -1);
       const noteArr = notes.split("#");
   
       noteArr.forEach(el => {
         const tmp = el.split(",");
+        console.log('el : ' + tmp);
         const note = parseInt(tmp[0]) - 1;
-        if (note < 0) {
-          continue;
-        }
         const time = parseInt(tmp[1]) * 10;
-
         const cur = Date.now();
-        scheduledTime = Math.max(scheduledTime, cur) + time;
-        setTimeout(manualPlay, scheduledTime - cur, map[note].charCodeAt(0));
-        console.log('delay: ' + (scheduledTime - cur));
-        console.log(map[note].charCodeAt(0));
-      });
 
+        console.log('prev :' + scheduledTime);
+        console.log('cur : ' + cur);
+        console.log('duration : ' + time);
+        scheduledTime = Math.max(scheduledTime, cur) + time;
+        if (note >= 0) {
+          setTimeout(manualPlay, scheduledTime - cur, map[note].charCodeAt(0));
+        }
+        
+      });
+      console.log('schedulted time : ', scheduledTime);
+      sessionStorage.setItem('scheduledTime', scheduledTime);
     } catch (err) {
       console.error(err);
     }
