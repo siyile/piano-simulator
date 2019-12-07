@@ -103,7 +103,10 @@ $(document).ready(() => {
   
       noteArr.forEach(el => {
         const tmp = el.split(",");
-        const note = parseInt(tmp[0]);
+        const note = parseInt(tmp[0]) - 1;
+        if (note < 0) {
+          continue;
+        }
         const time = parseInt(tmp[1]) * 10;
 
         const cur = Date.now();
